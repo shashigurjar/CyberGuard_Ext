@@ -1,0 +1,7 @@
+/cyberGuard-extension/.env
+/cyberGuard-extension/node_modules
+
+/backend/.env
+/backend/node_modules
+
+misc
