@@ -1,7 +1,12 @@
 /cyberGuard-extension/.env
 /cyberGuard-extension/node_modules
+/cyberGuard-extension/dist
 
 /backend/.env
-/backend/node_modules
+/backend/app/ml/trainedModels
+
+/admin-dashboard/.env
+/admin-dashboard/node_modules
+/admin-dashboard/dist
 
 misc

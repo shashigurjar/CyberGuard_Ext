@@ -1,7 +1,7 @@
 {
   "name": "cyberguard-extension",
   "version": "1.0.0",
-  "description": "",
+  "description": "Chrome extension to detect phishing URLs and QR codes using ML in-browser",
   "license": "ISC",
   "author": "Karan",
   "type": "module",
@@ -13,7 +13,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.4.1",

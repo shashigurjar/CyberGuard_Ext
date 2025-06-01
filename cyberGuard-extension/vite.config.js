@@ -12,8 +12,15 @@ export default defineConfig({
         background: resolve(__dirname, 'src/background/background.js'),
         content: resolve(__dirname, 'src/content/contentScript.js'),
       },
+      output: {
+        entryFileNames: '[name].js',
+        chunkFileNames: 'chunks/[name].[hash].js',
+        assetFileNames: 'assets/[name].[hash].[ext]'
+      }
     },
     outDir: 'dist',
     emptyOutDir: true,
-  },
+    minify: true,
+    sourcemap: false
+  }
 });
