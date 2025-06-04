@@ -4,6 +4,11 @@
 
 /backend/.env
 /backend/app/ml/trainedModels
+/backend/__pycache__
+/backend/app/__pycache__
+/backend/app/ml/__pycache__
+/backend/app/routes/__pycache__
+/backend/app/ml/utils/__pycache__
 
 /admin-dashboard/.env
 /admin-dashboard/node_modules

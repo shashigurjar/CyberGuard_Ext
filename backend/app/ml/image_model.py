@@ -8,10 +8,13 @@ import joblib
 
 from pyzbar import pyzbar
 
-from utils.utils import cast_to_int
-from utils.pipeline_class import QRHybridPipeline
-from preprocess_url import extract_clean_url, extract_url_features
+from .utils.utils import cast_to_int
+from .utils.pipeline_class import QRHybridPipeline
+from .preprocess_url import extract_clean_url, extract_url_features
 
+import __main__
+__main__.QRHybridPipeline = QRHybridPipeline
+__main__.cast_to_int = cast_to_int
 
 with open(os.path.abspath("app/ml/trainedModels/qr_hybrid_pipeline.pkl"), "rb") as f:
     loaded_pipeline = pickle.load(f)
@@ -48,13 +51,13 @@ def predict_qr_from_url(image_url,
     # 2) Decode QR codes
     decoded_objs = pyzbar.decode(img)
     if not decoded_objs:
-        return {"error": "No QR code detected in image"}
+        return ValueError({"error": "No QR code detected in image"})
 
     # 3) Extract QR content and URL features
     qr_content = decoded_objs[0].data.decode("utf-8")
     cleaned_url = extract_clean_url(qr_content)
     if not cleaned_url:
-        return {"error": "Decoded QR has no valid URL"}
+        return ValueError({"error": "Decoded QR has no valid URL"})
     url_features = extract_url_features(cleaned_url)
 
     # 4) Prepare model inputs
@@ -70,16 +73,25 @@ def predict_qr_from_url(image_url,
     })[0][0]
 
     return {
-        "malicious_probability": float(pred_prob),
-        "prediction": "Malicious" if pred_prob >= 0.5 else "Benign"
+        "phishy_probability": float(pred_prob),
+        "label": "Phishing" if pred_prob >= 0.5 else "Legitimate"
     }
 
+
+def predict_image(image_url):
+    return predict_qr_from_url(
+        image_url,
+        model,
+        preprocessor,
+        kbest,
+        training_columns
+    )
 # Example usage:
-result = predict_qr_from_url(
-    "https://docs.lightburnsoftware.com/legacy/img/QRCode/ExampleCode.png",
-    model,
-    preprocessor,
-    kbest,
-    training_columns
-)
-print(result)
+# result = predict_qr_from_url(
+#     "https://docs.lightburnsoftware.com/legacy/img/QRCode/ExampleCode.png",
+#     model,
+#     preprocessor,
+#     kbest,
+#     training_columns
+# )
+# print(result)
