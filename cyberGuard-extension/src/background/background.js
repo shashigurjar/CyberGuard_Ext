@@ -1,14 +1,19 @@
 console.log('Background script loaded');
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'PAGE_DATA') {
     console.log('Received data from content script:', message.payload);
 
-    const image_predictions = fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
-    // const url_predictions = fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
+    const image_predictions = await fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
+    // const url_predictions = await fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
 
-    console.log('Image predictions: \n', image_predictions);
-    // console.log('URL predictions: \n', url_predictions);
+    // console.log('Image predictions: \n', image_predictions);
+
+    const successfulImagePredictions = image_predictions.filter(item => item.status === 'success');
+    // const successfulURLPredictions = url_predictions.filter(item => item.status === 'success');
+
+    // console.log('Successful image predictions: \n', successfulImagePredictions);
+
   }
 });
 
