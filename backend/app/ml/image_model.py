@@ -38,44 +38,49 @@ def predict_qr_from_url(image_url,
                         preprocessor,
                         kbest,
                         training_columns):
+    try:
+        # 1) Download image
+        resp = requests.get(image_url, timeout=5)
+        if resp.status_code != 200:
+            raise ValueError(f"Failed to download image: HTTP {resp.status_code}")
+        img_array = np.asarray(bytearray(resp.content), dtype=np.uint8)
+        img = cv2.imdecode(img_array, cv2.IMREAD_GRAYSCALE)
+        if img is None:
+            raise ValueError("Downloaded content is not a valid image")
 
-    # 1) Download image
-    resp = requests.get(image_url)
-    if resp.status_code != 200:
-        raise ValueError(f"Failed to download image: HTTP {resp.status_code}")
-    img_array = np.asarray(bytearray(resp.content), dtype=np.uint8)
-    img = cv2.imdecode(img_array, cv2.IMREAD_GRAYSCALE)
-    if img is None:
-        raise ValueError("Downloaded content is not a valid image")
+        # 2) Decode QR codes
+        decoded_objs = pyzbar.decode(img)
+        if not decoded_objs:
+            raise ValueError("No QR code detected in image")
 
-    # 2) Decode QR codes
-    decoded_objs = pyzbar.decode(img)
-    if not decoded_objs:
-        return ValueError({"error": "No QR code detected in image"})
+        # 3) Extract content & URL features
+        qr_content = decoded_objs[0].data.decode("utf-8")
+        cleaned_url = extract_clean_url(qr_content)
+        if not cleaned_url:
+            raise ValueError("Decoded QR has no valid URL")
+        url_features = extract_url_features(cleaned_url)
 
-    # 3) Extract QR content and URL features
-    qr_content = decoded_objs[0].data.decode("utf-8")
-    cleaned_url = extract_clean_url(qr_content)
-    if not cleaned_url:
-        return ValueError({"error": "Decoded QR has no valid URL"})
-    url_features = extract_url_features(cleaned_url)
+        # 4) Prepare model inputs
+        X_img = preprocess_image_array(img)
+        X_url_df = pd.DataFrame([url_features], columns=training_columns)
+        X_url_pre = preprocessor.transform(X_url_df)
+        X_url_fin = kbest.transform(X_url_pre)
 
-    # 4) Prepare model inputs
-    X_img = preprocess_image_array(img)
-    X_url_df = pd.DataFrame([url_features], columns=training_columns)
-    X_url_pre = preprocessor.transform(X_url_df)
-    X_url_fin = kbest.transform(X_url_pre)
+        # 5) Predict
+        pred_prob = model.predict({
+            "qr_image": X_img,
+            "url_features": X_url_fin
+        })[0][0]
 
-    # 5) Predict
-    pred_prob = model.predict({
-        "qr_image": X_img,
-        "url_features": X_url_fin
-    })[0][0]
+        return {
+            "phishy_probability": float(pred_prob),
+            "label": "Phishing" if pred_prob >= 0.5 else "Legitimate"
+        }
 
-    return {
-        "phishy_probability": float(pred_prob),
-        "label": "Phishing" if pred_prob >= 0.5 else "Legitimate"
-    }
+    except Exception as e:
+        # Catch everything and return an error dict
+        return {"error": str(e)}
+
 
 
 def predict_image(image_url):
