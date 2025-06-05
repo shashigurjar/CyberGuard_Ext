@@ -41,5 +41,5 @@
   "icons": {
 
   },
-  "options_page": "options.js"
+  "options_page": "options.html"
 }

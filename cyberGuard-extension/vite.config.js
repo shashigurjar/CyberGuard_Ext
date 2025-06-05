@@ -8,7 +8,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: resolve(__dirname, 'public/popup.html'),
-        options: resolve(__dirname, 'src/options/main.jsx'),
+        options: resolve(__dirname, 'public/options.html'),
         background: resolve(__dirname, 'src/background/background.js'),
         content: resolve(__dirname, 'src/content/contentScript.js'),
       },
@@ -21,6 +21,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     minify: true,
-    sourcemap: false
+    sourcemap: false,
+    cssCodeSplit: false
   }
 });

@@ -1,0 +1,116 @@
+.popup-container {
+  width: 300px;
+  padding: 12px;
+  font-family: Arial, sans-serif;
+}
+
+.title {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.section {
+  margin-top: 16px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 4px;
+}
+
+.empty-message {
+  text-align: center;
+  color: #555;
+  font-style: italic;
+  margin: 8px 0;
+}
+
+.url-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.url-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.url-link,
+.qr-text {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: bold;
+  margin-bottom: 6px;
+  word-break: break-all;
+}
+
+.qr-text {
+  display: inline-block;
+  cursor: default;
+}
+
+.details {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.prediction {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.prediction.PHISHING {
+  color: #c00;
+}
+
+.prediction.LEGITIMATE {
+  color: #090;
+}
+
+.prob-bar {
+  flex: 1;
+  background: #eee;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-right: 6px;
+}
+
+.filled {
+  height: 100%;
+  background: #c00;
+}
+
+.percent {
+  font-size: 0.75rem;
+  width: 36px;
+  text-align: right;
+}
+
+.feedback-btn {
+  align-self: flex-end;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border: none;
+  background: #0066cc;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.feedback-btn:hover {
+  background: #005bb5;
+}
