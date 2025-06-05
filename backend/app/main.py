@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes.url_prediction import router as url_router
+from app.routes.url_prediction_routes import router as url_router
 from app.routes.image_prediction_routes import router as image_router
 
 app = FastAPI(title="Phishing Detection Server")
