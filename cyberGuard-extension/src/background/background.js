@@ -1,5 +1,10 @@
 console.log('Background script loaded');
 
+let successfulImagePredictions = [];
+let successfulURLPredictions = [];
+
+
+// load predictions and store in chrome's storage
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'PAGE_DATA') {
     console.log('Received data from content script:', message.payload);
@@ -7,15 +12,42 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     const image_predictions = await fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
     // const url_predictions = await fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
 
-    // console.log('Image predictions: \n', image_predictions);
+    console.log('Image predictions: \n', image_predictions);
 
-    const successfulImagePredictions = image_predictions.filter(item => item.status === 'success');
-    // const successfulURLPredictions = url_predictions.filter(item => item.status === 'success');
+    successfulImagePredictions = image_predictions.filter(item => item.status === 'success');
+    // successfulURLPredictions = url_predictions.filter(item => item.status === 'success');
 
-    // console.log('Successful image predictions: \n', successfulImagePredictions);
+    console.log('Successful image predictions: \n', successfulImagePredictions);
 
+    chrome.storage.session.set({ successfulImagePredictions });
+    chrome.storage.session.set({ successfulURLPredictions });
   }
 });
+
+
+// send the successful prediction arrays
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === 'PHISHY_ENTRIES') {
+    sendResponse({
+      payload: {
+        anchors: successfulURLPredictions,
+        images: successfulImagePredictions
+      }
+    });
+  }
+  return true;
+});
+
+
+// clear storage on change of tab
+chrome.tabs.onActivated.addListener(({ tabId }) => {
+  chrome.storage.session.remove(['successfulAnchors', 'successfulImagePredictions'], () => {
+    console.log('Cleared prediction storage on tab switch');
+  });
+
+  urlCache.clear();
+});
+
 
 const API_BASE = 'http://127.0.0.1:8000';
 const IMAGE_PREDICT_ENDPOINT = '/api/predict-image';
@@ -56,7 +88,7 @@ async function fetchPredictions(urls, ENDPOINT) {
 
   // Build final result array
   return uniqueUrls.map(url => {
-    const { status, prediction, phishy_probability} = urlCache.get(url);
-    return { url, status, prediction, phishy_probability};
+    const { status, prediction, phishy_probability } = urlCache.get(url);
+    return { url, status, prediction, phishy_probability };
   });
 }

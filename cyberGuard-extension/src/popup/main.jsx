@@ -9,12 +9,27 @@ function App() {
     const [phishyQRs, setQRs] = React.useState([]);
 
     React.useEffect(() => {
-        chrome.runtime.onMessage.addListener((msg) => {
-            if (msg.type === 'PHISHY_ENTRIES') {
-                setAnchors(msg.payload.anchors || []);
-                setQRs(msg.payload.images || []);
+        chrome.runtime.sendMessage({ type: 'PHISHY_ENTRIES' }, (response) => {
+            if (response?.payload) {
+                setAnchors(response.payload.anchors);
+                setQRs(response.payload.images);
             }
         });
+
+        const onChange = (changes, area) => {
+            if (area === 'session' && changes.successfulImagePredictions) {
+                setQRs(changes.successfulImagePredictions.newValue || []);
+            }
+            if (area === 'session' && changes.successfulURLPredictions) {
+                setAnchors(changes.successfulURLPredictions.newValue || []);
+            }
+        };
+
+        chrome.storage.onChanged.addListener(onChange);
+
+        return () => {
+            chrome.storage.onChanged.removeListener(onChange);
+        };
     }, []);
 
     return (

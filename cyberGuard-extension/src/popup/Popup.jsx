@@ -1,11 +1,13 @@
 import './popup.css';
 
 export default function Popup({ phishyAnchors = [], phishyQRs = [] }) {
+  const hasAny = phishyAnchors.length > 0 || phishyQRs.length > 0;
+
   return (
     <div className="popup-container">
-      <h1 className="title">CyberGuard Alerts</h1>
+      <h1 className="title">PhishGuard Alerts</h1>
 
-      {/* Phishy URLs */}
+      {/* Section for Phishy URLs */}
       <section className="section">
         <h2 className="section-title">Phishy URLs</h2>
         {phishyAnchors.length === 0 ? (
@@ -39,7 +41,7 @@ export default function Popup({ phishyAnchors = [], phishyQRs = [] }) {
         )}
       </section>
 
-      {/* Phishy QR Codes */}
+      {/* Section for Phishy QR Codes */}
       <section className="section">
         <h2 className="section-title">Phishy QR Codes</h2>
         {phishyQRs.length === 0 ? (
@@ -65,6 +67,18 @@ export default function Popup({ phishyAnchors = [], phishyQRs = [] }) {
           </ul>
         )}
       </section>
+
+      {/* Feedback Button */}
+      {hasAny && (
+        <div className="feedback-container">
+          <button
+            className="feedback-btn"
+            onClick={() => chrome.runtime.openOptionsPage()}
+          >
+            Provide Feedback
+          </button>
+        </div>
+      )}
     </div>
   );
 }
