@@ -13,5 +13,6 @@
 /admin-dashboard/.env
 /admin-dashboard/node_modules
 /admin-dashboard/dist
-
+**/__pycache__/
+*.py[cod]
 misc
