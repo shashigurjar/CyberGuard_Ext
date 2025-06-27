@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "CyberGuard: Real-Time URL & QR Code Scanner",
+  "version": "1.0.0",
+  "description": "Detect phishing URLs and QR codes in real time using machine learning models inside your browser.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+
+    }
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [
+    "scripting",
+    "storage",
+    "activeTab",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*",
+        "models/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+
+  },
+  "options_page": "options.html"
+}
