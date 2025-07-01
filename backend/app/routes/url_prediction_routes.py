@@ -13,7 +13,7 @@ class URLRequest(BaseModel):
 class PredictionResult(BaseModel):
     status: str
     prediction: str
-    confidence: float
+    phishy_probability: float
 
 
 class URLResponse(BaseModel):
@@ -30,14 +30,14 @@ def predict_phishy_urls(data: URLRequest):
             results[url] = PredictionResult(
                 status="success",
                 prediction=result["label"],
-                confidence=result["confidence"]
+                phishy_probability=result["phishy_probability"]
             )
 
         except Exception as e:
             results[url] = PredictionResult(
                 status="error",
                 prediction=str(e),
-                confidence=-1.0
+                phishy_probability=-1.0
             )
 
     return {"results": results}

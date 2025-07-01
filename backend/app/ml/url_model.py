@@ -4,7 +4,7 @@ import joblib
 from threading import Lock
 from .preprocess_url import extract_url_features
 
-BASE_DIR = os.path.abspath("C:/Users/Asus/Downloads")
+BASE_DIR = os.path.abspath("app/ml/trainedModels")
 MODEL_PATH = os.path.join(BASE_DIR, "phishing_detection_pipeline (1).pkl")
 FEATURE_NAMES_PATH = os.path.join(BASE_DIR, "feature_names.pkl")
 
@@ -60,19 +60,19 @@ def predict_url(url: str) -> dict:
     # 4. Model prediction
     pred_label = model.predict(input_df)[0]
 
-    confidence = 1.0
+    phishy_probability = 1.0
     if hasattr(model, "predict_proba"):
         try:
             probs = model.predict_proba(input_df)[0]
             idx = int(pred_label)
-            confidence = float(probs[idx])
+            phishy_probability = 1 - float(probs[idx])
         except Exception:
-            confidence = 1.0
+            phishy_probability = 1.0
 
     # 6. Map numeric label to string
     label_str = "Phishing" if int(pred_label) == 1 else "Legitimate"
 
-    return {"label": label_str, "confidence": confidence}
+    return {"label": label_str, "phishy_probability": phishy_probability}
 
 
 if __name__ == "__main__":

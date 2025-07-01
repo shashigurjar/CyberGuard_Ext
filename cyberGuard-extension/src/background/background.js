@@ -10,14 +10,16 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     console.log('Received data from content script:', message.payload);
 
     const image_predictions = await fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
-    // const url_predictions = await fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
+    const url_predictions = await fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
 
     console.log('Image predictions: \n', image_predictions);
+    console.log('URL predictions: \n', url_predictions);
 
     successfulImagePredictions = image_predictions.filter(item => item.status === 'success');
-    // successfulURLPredictions = url_predictions.filter(item => item.status === 'success');
+    successfulURLPredictions = url_predictions.filter(item => item.status === 'success');
 
     console.log('Successful image predictions: \n', successfulImagePredictions);
+    console.log('Successful url predictions: \n', successfulURLPredictions);
 
     chrome.storage.session.set({ successfulImagePredictions });
     chrome.storage.session.set({ successfulURLPredictions });
