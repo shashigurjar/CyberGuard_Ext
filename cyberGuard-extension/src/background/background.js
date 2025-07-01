@@ -17,8 +17,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     (async () => {
       console.log('Received data from content script:', message.payload);
 
-      const image_predictions = await fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
-      const url_predictions = await fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
+      const imagePromise = fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
+      const urlPromise = fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
+      const [image_predictions, url_predictions] = await Promise.all([imagePromise, urlPromise]);
 
       console.log('Image predictions: \n', image_predictions);
       console.log('URL predictions: \n', url_predictions);
