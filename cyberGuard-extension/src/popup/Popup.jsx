@@ -5,32 +5,32 @@ export default function Popup({ phishyAnchors = [], phishyQRs = [] }) {
 
   return (
     <div className="popup-container">
-      <h1 className="title">PhishGuard Alerts</h1>
+      <h1 className="title cyberguard-title">CyberGuard Alerts</h1>
 
       {/* Section for Phishy URLs */}
       <section className="section">
-        <h2 className="section-title">Phishy URLs</h2>
+        <h2 className="section-title section-title-urls">Phishy URLs</h2>
         {phishyAnchors.length === 0 ? (
-          <p className="empty-message">No suspicious URLs detected.</p>
+          <p className="empty-message empty-message-urls">No suspicious URLs detected.</p>
         ) : (
-          <ul className="url-list">
+          <ul className="url-list phishy-anchors-list">
             {phishyAnchors.map((item, idx) => {
               const { url, prediction, phishy_probability } = item;
               const pct = Math.round(phishy_probability * 100);
               return (
-                <li key={idx} className="url-card">
+                <li key={idx} className="url-card url-card-urls">
                   <a
                     href={url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="url-link"
+                    className="url-link url-link-urls"
                   >
                     {url.length > 40 ? url.slice(0, 37) + '...' : url}
                   </a>
                   <div className="details">
                     <span className={`prediction ${prediction.toUpperCase()}`}>{prediction.toUpperCase()}</span>
-                    <div className="prob-bar">
-                      <div className="filled" style={{ width: `${pct}%` }} />
+                    <div className="prob-bar prob-bar-urls">
+                      <div className="filled filled-urls" style={{ width: `${pct}%` }} />
                     </div>
                     <span className="percent">{pct}%</span>
                   </div>
@@ -43,21 +43,21 @@ export default function Popup({ phishyAnchors = [], phishyQRs = [] }) {
 
       {/* Section for Phishy QR Codes */}
       <section className="section">
-        <h2 className="section-title">Phishy QR Codes</h2>
+        <h2 className="section-title section-title-qrs">Phishy QR Codes</h2>
         {phishyQRs.length === 0 ? (
-          <p className="empty-message">No suspicious QR codes detected.</p>
+          <p className="empty-message empty-message-qrs">No suspicious QR codes detected.</p>
         ) : (
-          <ul className="url-list">
+          <ul className="url-list phishy-qrs-list">
             {phishyQRs.map((item, idx) => {
               const { url, prediction, phishy_probability } = item;
               const pct = Math.round(phishy_probability * 100);
               return (
-                <li key={idx} className="url-card">
-                  <span className="qr-text">{url.length > 40 ? url.slice(0, 37) + '...' : url}</span>
+                <li key={idx} className="url-card url-card-qrs">
+                  <span className="qr-text qr-text-qrs">{url.length > 40 ? url.slice(0, 37) + '...' : url}</span>
                   <div className="details">
                     <span className={`prediction ${prediction.toUpperCase()}`}>{prediction.toUpperCase()}</span>
-                    <div className="prob-bar">
-                      <div className="filled" style={{ width: `${pct}%` }} />
+                    <div className="prob-bar prob-bar-qrs">
+                      <div className="filled filled-qrs" style={{ width: `${pct}%` }} />
                     </div>
                     <span className="percent">{pct}%</span>
                   </div>
