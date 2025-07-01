@@ -1,3 +1,16 @@
+body, #root {
+  min-width: 400px;
+  max-width: 450px;
+  width: 100vw;
+  height: 600px;
+  min-height: 600px;
+  max-height: 600px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+}
+
 .popup-container {
   width: 300px;
   padding: 12px;
@@ -113,4 +126,46 @@
 
 .feedback-btn:hover {
   background: #005bb5;
+}
+
+/* Loader styles */
+.cyberguard-loader-bg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: linear-gradient(135deg, #0f2027 0%, #2c5364 100%);
+  color: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.cyberguard-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  letter-spacing: 2px;
+  color: #00e6e6;
+  text-shadow: 0 2px 8px #0008;
+}
+
+.cyberguard-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #00e6e6;
+  border-top: 6px solid #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cyberguard-loading-text {
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  opacity: 0.85;
 }
