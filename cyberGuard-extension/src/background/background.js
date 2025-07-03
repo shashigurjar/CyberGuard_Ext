@@ -15,24 +15,30 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'PAGE_DATA') {
     predictionsReady = false;
     (async () => {
-      console.log('Received data from content script:', message.payload);
+      try {
+        console.log('Received data from content script:', message.payload);
 
-      const imagePromise = fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
-      const urlPromise = fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
-      const [image_predictions, url_predictions] = await Promise.all([imagePromise, urlPromise]);
+        const imagePromise = fetchPredictions(message.payload.imageUrls, IMAGE_PREDICT_ENDPOINT);
+        const urlPromise = fetchPredictions(message.payload.anchorUrls, URL_PREDICT_ENDPOINT);
+        const [image_predictions, url_predictions] = await Promise.all([imagePromise, urlPromise]);
 
-      console.log('Image predictions: \n', image_predictions);
-      console.log('URL predictions: \n', url_predictions);
+        successfulImagePredictions = image_predictions.filter(item => item.status === 'success');
+        successfulURLPredictions = url_predictions.filter(item => item.status === 'success');
 
-      successfulImagePredictions = image_predictions.filter(item => item.status === 'success');
-      successfulURLPredictions = url_predictions.filter(item => item.status === 'success');
+        console.log('Successful image predictions: \n', successfulImagePredictions);
+        console.log('Successful url predictions: \n', successfulURLPredictions);
 
-      console.log('Successful image predictions: \n', successfulImagePredictions);
-      console.log('Successful url predictions: \n', successfulURLPredictions);
-
-      chrome.storage.session.set({ successfulImagePredictions });
-      chrome.storage.session.set({ successfulURLPredictions });
-      predictionsReady = true;
+        await chrome.storage.session.set({ successfulImagePredictions });
+        await chrome.storage.session.set({ successfulURLPredictions });
+        await chrome.storage.session.remove(['predictionError']);
+      } catch (error) {
+        console.error('Prediction error:', error);
+        successfulImagePredictions = [];
+        successfulURLPredictions = [];
+        await chrome.storage.session.set({ predictionError: error.message || 'Unknown error occurred' });
+      } finally {
+        predictionsReady = true;
+      }
     })();
     return true;
   }
@@ -42,25 +48,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'PHISHY_ENTRIES') {
     if (!predictionsReady) {
-      const interval = setInterval(() => {
+      const interval = setInterval(async () => {
         if (predictionsReady) {
           clearInterval(interval);
+          const errorObj = await chrome.storage.session.get('predictionError');
           sendResponse({
             payload: {
               anchors: successfulURLPredictions,
-              images: successfulImagePredictions
+              images: successfulImagePredictions,
+              error: errorObj.predictionError || null
             }
           });
         }
       }, 100);
       return true;
     } else {
-      sendResponse({
-        payload: {
-          anchors: successfulURLPredictions,
-          images: successfulImagePredictions
-        }
-      });
+      (async () => {
+        const errorObj = await chrome.storage.session.get('predictionError');
+        sendResponse({
+          payload: {
+            anchors: successfulURLPredictions,
+            images: successfulImagePredictions,
+            error: errorObj.predictionError || null
+          }
+        });
+      })();
       return true;
     }
   }
