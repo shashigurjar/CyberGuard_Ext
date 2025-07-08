@@ -8,6 +8,8 @@ import os
 from app.routes.url_prediction_routes import router as url_router
 from app.routes.image_prediction_routes import router as image_router
 from app.routes.user_routes import router as user_router
+from app.routes.dashboard_routes import router as dashboard_router
+
 
 load_dotenv()
 MONGO_URI = os.getenv("MONGODB_URI")
@@ -29,6 +31,7 @@ app.add_middleware(
 app.include_router(url_router, prefix="/api")
 app.include_router(image_router, prefix="/api")
 app.include_router(user_router, prefix="/api")
+app.include_router(dashboard_router, prefix="/api")
 
 @app.get("/")
 def read_root():
