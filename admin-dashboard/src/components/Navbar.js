@@ -21,9 +21,6 @@ function Navbar(props) {
             <nav>
                 <ul className='flex gap-6 text-lg'>
                     <li>
-                        <Link to="/" className="hover:text-blue-400 transition-colors">Home</Link>
-                    </li>
-                    <li>
                         <Link to="/about" className="hover:text-blue-400 transition-colors">About</Link>
                     </li>
                     <li>

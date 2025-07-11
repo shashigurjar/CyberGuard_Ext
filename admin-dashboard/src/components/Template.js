@@ -34,7 +34,7 @@ function Template({ title, desc1, desc2, formtype, image, setIsLoggedin }) {
                 </div>
 
                 <div className="md:w-1/2 flex justify-center items-center">
-                    <img src={image} alt="Student" width={558} height={560} loading="lazy" className="rounded-md border border-gray-600" />
+                    <img src={image} alt="Student" width={558} height={500} loading="lazy" className="rounded-md border border-gray-600" />
                 </div>
             </div>
         </div>
