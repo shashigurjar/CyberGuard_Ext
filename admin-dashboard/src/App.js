@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {Routes, Route} from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoute';
+
+// Use environment variable for API URL
+const API_URL = process.env.REACT_APP_API_URL;
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(null); 
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/auth/dashboard', {
+    fetch(`${API_URL}/api/auth/dashboard`, {
       credentials: 'include'
     })
       .then(res => {
@@ -30,7 +33,7 @@ function App() {
     <div className="App">
       <Navbar isLoggedIn = {isLoggedIn} setIsLoggedin={setIsLoggedIn}/>
       <Routes>
-        <Route path='/' element={<Home/>}/>
+        <Route path='/' element={<Login setIsLoggedin={setIsLoggedIn}/>}/>
         <Route path='/about' element={<About/>}/>
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/login' element={<Login setIsLoggedin={setIsLoggedIn}/>}/>

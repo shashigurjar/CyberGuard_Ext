@@ -1,11 +1,14 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import {Navigate} from 'react-router-dom';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
 function PrivateRoute({children}){
     const [auth, setAuth] = useState(null)
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/auth/dashboard', {
+        fetch(`${API_URL}/api/auth/dashboard`, {
         credentials: "include",
         })
         .then((res) => {

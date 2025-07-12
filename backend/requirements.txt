@@ -14,10 +14,19 @@ requests-file==2.1.0
 tldextract==5.3.0
 tensorflow==2.19.0
 joblib==1.4.2
+<<<<<<< HEAD
 mongoengine==0.27.0
 dnspython==2.4.2
 bcrypt==4.1.2
 uvicorn==0.29.0
+=======
+mongoengine==0.29.1
+pymongo==4.13.2
+dnspython==2.4.2
+bcrypt==4.1.2
+uvicorn==0.29.0
+xgboost==3.0.2
+>>>>>>> friend/main
 
 Flask==3.0.3
 flask-cors==4.0.0
