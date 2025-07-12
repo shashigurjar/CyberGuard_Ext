@@ -79,8 +79,8 @@ Here are some screenshots of CyberGuard in action:
 
 ### 1. Clone the repo  
    ```bash
-   git clone https://github.com/kk1701/cyberGuard
-   cd cyberGuard
+   https://github.com/shashigurjar/CyberGuard_Ext
+   cd CyberGuard_Ext
    ```
 ### 2. Start the backend (FastAPI with uvicorn)
 ```
