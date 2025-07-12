@@ -1,11 +1,13 @@
 import img from '../assets/f2.png';
 import { Link, useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function Navbar(props) {
     const navigate = useNavigate()
     let isLoggedIn = props.isLoggedIn;
     async function handleLogOut(){
-        await fetch("http://localhost:8000/api/auth/logout", {
+        await fetch(`${API_URL}/api/auth/logout`, {
         method: "POST",
         credentials: "include"
         });

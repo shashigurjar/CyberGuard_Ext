@@ -3,6 +3,8 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function Login({ setIsLoggedin }) {
     const navigate = useNavigate();
 
@@ -24,7 +26,7 @@ function Login({ setIsLoggedin }) {
         event.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8000/api/auth/login", {
+            const response = await fetch(`${API_URL}/api/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),

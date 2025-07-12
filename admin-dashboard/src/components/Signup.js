@@ -3,6 +3,8 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function Signup({ setIsLoggedin }) {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
@@ -27,7 +29,7 @@ function Signup({ setIsLoggedin }) {
             return;
         }
         try{
-            const response = await fetch('http://localhost:8000/api/auth/signup', {
+            const response = await fetch(`${API_URL}/api/auth/signup`, {
                 method: 'POST',
                 headers: {'Content-Type' : 'application/json'},
                 body: JSON.stringify({

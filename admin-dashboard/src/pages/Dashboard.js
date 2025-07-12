@@ -19,6 +19,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 const Dashboard = () => {
   const [stats, setStats] = useState({
     total_urls: 0,
@@ -34,7 +36,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/dashboard/stats");
+        const response = await fetch(`${API_URL}/api/dashboard/stats`);
         const data = await response.json();
         setStats(data);
       } catch (error) {
@@ -44,7 +46,7 @@ const Dashboard = () => {
 
     const fetchScans = async () => {
       try {
-        const res = await fetch("http://localhost:8000/api/dashboard/recent-scans");
+        const res = await fetch(`${API_URL}/api/dashboard/recent-scans`);
         const scans = await res.json();
         setRecentScans(scans);
       } catch (err) {
